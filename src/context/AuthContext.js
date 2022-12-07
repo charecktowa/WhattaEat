@@ -26,11 +26,29 @@ export const AuthProvider = ({ children }) => {
         });
     };
 
+    const login = (email, password) => {
+        setIsLoading(true);
+
+        axios.post(`https://api.randomlearning.fun/user/user/login`, {
+            email, password,
+        }).then(res => {
+            let userInfo = res.data;
+            setUserInfo(userInfo);
+            console.log(userInfo);
+            AsyncStorage.setItem('userinfo', JSON.stringify(userInfo));
+            setIsLoading(false);
+        }).catch(e => {
+            console.log(e);
+            setIsLoading(false);
+        })
+    }
+
     return (
         <AuthContext.Provider value={{
             isLoading,
             userInfo,
-            register
+            register,
+            login,
         }}>{children}</AuthContext.Provider>
     );
 };
